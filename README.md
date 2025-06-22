@@ -5,8 +5,9 @@ This Python script connects to your Gmail inbox via IMAP, reads unread emails, f
 ---
 
 ## 🧠 Ideation
-* [Ideation PPT](./ideaton-ppt.md)
-* [Ideation Document](./ideaton.md)
+* [Ideation PPT](./ideation-ppt.md)
+* [Ideation Document](./ideation.md)
+
 
 ## ✅ Features
 
