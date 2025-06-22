@@ -1,102 +1,105 @@
-# 💼 Pitch Deck: Email Lead Extractor
+# 🧠 Ideation Document: Email Lead Extractor
 
----
-
-## Slide 1: 🚀 Idea Overview
+## 📌 Title of Idea
 
 **Email Lead Extractor**
-An automation tool to convert unread emails into qualified leads.
+A simple automation tool that helps businesses extract and organize leads directly from their inbox.
 
 ---
 
-## Slide 2: 😩 The Problem
+## 🎯 Problem Statement
 
-Manual inbox scanning leads to:
+We receive potential customer leads directly through email. However, identifying, filtering, and organizing these leads manually is time-consuming and inefficient. Important leads can be easily missed, especially when the inbox is cluttered.
 
-* Missed opportunities
-* Inefficient follow-ups
-* Poor CRM data quality
+This causes:
 
----
-
-## Slide 3: 💡 Our Solution
-
-A script that:
-
-* Connects securely to Gmail
-* Detects lead-related emails
-* Extracts emails & phone numbers
-* Saves structured data into a CSV or Google Sheet
+* Loss of potential customers
+* Delays in follow-up communication
+* Poor or no integration with CRM systems
 
 ---
 
-## Slide 4: 🧑‍💼 Target Users
+## 💡 Proposed Solution
 
-* Freelancers / Consultants
-* Small & Medium Businesses
-* Sales & Marketing Teams
-* CRM Admins
+The solution is a Python-based script that automatically:
 
----
+* Connects to your Gmail inbox via IMAP securely
+* Searches for emails containing lead-related content using pre-defined keywords
+* Extracts important contact information like phone numbers and email addresses
+* Stores the information into a structured CSV file or optionally into a Google Sheet
 
-## Slide 5: 🔧 Key Features
-
-* Gmail IMAP integration
-* Lead keyword filtering
-* Contact info extraction
-* Export to CSV
-* Secure `.env` config
+This tool provides a hands-free experience for converting unstructured email data into structured, actionable sales leads.
 
 ---
 
-## Slide 6: ✅ MVP
+## 👥 Target Audience
 
-* Process 20 unread Gmail emails
-* Filter for leads
-* Extract and save contact info
+This script is designed for:
 
----
-
-## Slide 7: 💸 Business Model
-
-* Open-source CLI version (free)
-* Pro version with dashboard, CRM/Google Sheets integration
-* Custom enterprise integrations
+* Freelancers and consultants who receive client inquiries via email
+* Small and medium-sized businesses without advanced CRM systems
+* Marketing and sales teams that want to automate lead organization
+* CRM administrators looking for lightweight integrations
 
 ---
 
-## Slide 8: 🆚 Market Landscape
+## 🛠️ Core Features
+
+* **Secure IMAP access** to Gmail using `.env`-protected credentials
+* **Keyword-based lead detection** from email subject and body
+* **Extraction of phone numbers and email addresses** using pattern matching
+* **CSV file output** for easy access and CRM compatibility
+* Lightweight, modular, and easily customizable
+
+---
+
+## 🧪 Minimum Viable Product (MVP)
+
+The MVP version of this script includes:
+
+* Reading 20 unread emails from the Gmail inbox
+* Filtering them using predefined keywords like “lead”, “inquiry”, “requirement”
+* Extracting any email addresses or phone numbers present
+* Writing the results to a CSV file named `leads.csv`
+
+---
+
+
+## 📊 Competitor Analysis
 
 | Tool          | Pros                | Cons                     |
 | ------------- | ------------------- | ------------------------ |
 | Zapier        | Easy automation     | Expensive at scale       |
 | Mailparser.io | Powerful, flexible  | Paid-only, complex setup |
-| Our Solution  | Lightweight, simple | CLI only (UI roadmap)    |
+| Our Solution  | Lightweight, simple | CLI only (no UI yet)     |
 
 ---
 
-## Slide 9: 📊 Success Metrics
+## 📈 Success Metrics
 
-* Weekly leads captured
-* Time saved per user
-* CRM import rate
-* GitHub stars & user feedback
+To evaluate the success of this tool, we can measure:
 
----
-
-## Slide 10: 🔗 Future Integrations
-
-* **Microsoft Outlook** support
-* **LinkedIn API** for profile enrichment
-* **AI** tools for lead scoring and suggestions
+* The number of valid leads extracted per week
+* Reduction in time spent manually sorting emails
+* Percentage of leads imported into CRM from email
 
 ---
 
-## Slide 11: 📬 Get in Touch
+## 🔗 Future Integrations
 
-🔗 GitHub: [github.com/siddhirajpantoji/email\_lead\_reader](https://github.com/siddhirajpantoji/email_lead_reader)
+To expand the script’s value, future enhancements may include:
+
+* **Microsoft Outlook** mailbox support using IMAP or Microsoft Graph API
+* **LinkedIn API** integration to fetch company/individual profiles associated with emails
+* **AI tools** for analyzing and scoring leads based on their context, sentiment, or frequency
+
+---
+
+## 📬 Contact
+
+🔗 GitHub: [https://github.com/siddhirajpantoji/email\_lead\_reader](https://github.com/siddhirajpantoji/email_lead_reader)
 📧 Email: [siddhirajpantoji@gmail.com](mailto:siddhirajpantoji@gmail.com)
 
 ---
 
-*Thank you!*
+*End of Document*
