@@ -15,6 +15,16 @@ IMAP_SERVER = os.getenv("IMAP_SERVER", "imap.gmail.com")
 IMAP_PORT = int(os.getenv("IMAP_PORT", 993))
 CSV_FILE = "leads.csv"
 
+# --- Load Config from CSV ---
+def load_config(path='config.csv'):
+    config = {}
+    with open(path, newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            config[row['key']] = row['value']
+    return config
+
+    
 def decode_mime_words(s):
     try:
         decoded = decode_header(s)

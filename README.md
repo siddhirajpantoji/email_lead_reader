@@ -124,10 +124,17 @@ email_lead_reader/
 
 You can easily extend this script to:
 
+
+
+* **Microsoft Outlook** mailbox support using IMAP or Microsoft Graph API
+* **LinkedIn API** integration to fetch company/individual profiles associated with emails
+* **AI tools** for analyzing and scoring leads based on their context, sentiment, or frequency
 * Filter by **date range** (e.g. only this week)
 * Process **specific Gmail labels**
 * **Mark emails as read** after processing
-* Push leads to **Google Sheets**
+* Push leads to **Google Sheets** or a CRM
+* Add a **dashboard** to visualize leads
+* Use **AI** to suggest lead scores or categorize leads
 * Integrate with **Slack or CRM**
 * Send **auto-replies**
 
