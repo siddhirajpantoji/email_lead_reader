@@ -23,10 +23,10 @@ This causes:
 
 The solution is a Python-based script that automatically:
 
-* Connects to your Gmail inbox via IMAP securely
+* Connects to your Gmail inbox via IMAP or Microsoft Outlook via Graph API
 * Searches for emails containing lead-related content using pre-defined keywords
 * Extracts important contact information like phone numbers and email addresses
-* Stores the information into a structured CSV file or optionally into a Google Sheet
+* Stores the information into a structured CSV file with a timestamp inside an `/output` directory
 
 This tool provides a hands-free experience for converting unstructured email data into structured, actionable sales leads.
 
@@ -36,8 +36,6 @@ This tool provides a hands-free experience for converting unstructured email dat
 
 This script is designed for:
 
-* Freelancers and consultants who receive client inquiries via email
-* Small and medium-sized businesses without advanced CRM systems
 * Marketing and sales teams that want to automate lead organization
 * CRM administrators looking for lightweight integrations
 
@@ -45,10 +43,11 @@ This script is designed for:
 
 ## 🛠️ Core Features
 
-* **Secure IMAP access** to Gmail using `.env`-protected credentials
+* **Secure Gmail (IMAP) and Outlook (Graph API)** access
 * **Keyword-based lead detection** from email subject and body
 * **Extraction of phone numbers and email addresses** using pattern matching
-* **CSV file output** for easy access and CRM compatibility
+* **CSV file output** stored in `/output` with timestamps
+* **Configurable options via `config.csv`**, including toggle for `MARK_AS_READ`
 * Lightweight, modular, and easily customizable
 
 ---
@@ -57,13 +56,13 @@ This script is designed for:
 
 The MVP version of this script includes:
 
-* Reading 20 unread emails from the Gmail inbox
+* Reading 20 unread emails from the Gmail or Outlook inbox
 * Filtering them using predefined keywords like “lead”, “inquiry”, “requirement”
 * Extracting any email addresses or phone numbers present
-* Writing the results to a CSV file named `leads.csv`
+* Writing the results to a CSV file in the `/output` folder
+* Ability to mark emails as read based on `config.csv`
 
 ---
-
 
 ## 📊 Competitor Analysis
 
@@ -89,9 +88,10 @@ To evaluate the success of this tool, we can measure:
 
 To expand the script’s value, future enhancements may include:
 
-* **Microsoft Outlook** mailbox support using IMAP or Microsoft Graph API
+* **Microsoft Outlook label-based filters**
 * **LinkedIn API** integration to fetch company/individual profiles associated with emails
-* **AI tools** for analyzing and scoring leads based on their context, sentiment, or frequency
+* **AI tools** for analyzing and scoring leads based on context, sentiment, or urgency
+* Export to **Google Sheets** or direct CRM push
 
 ---
 
