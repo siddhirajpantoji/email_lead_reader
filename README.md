@@ -11,15 +11,13 @@ This Python script connects to your Gmail inbox via IMAP, reads unread emails, f
 
 ## ✅ Features
 
-* Connects securely to Gmail using IMAP
-* Reads **only unread** emails (doesn't mark them read)
-* Filters emails using lead-related **keywords**
-* Extracts contact data:
-
-  * Email addresses
-  * Phone numbers
-* Saves extracted information to `leads.csv`
-* Credentials are stored safely in a `.env` file
+* 🔐 Reads **Gmail (via IMAP)** or **Outlook (via Microsoft Graph API)**
+* 🔍 Filters for **lead-related emails** using keyword matching
+* 📤 Extracts contact details: **email addresses** and **phone numbers**
+* 🧠 Intelligent parsing using regex
+* 📁 Saves results in `output/leads_YYYY-MM-DD_HH-MM.csv`
+* 📝 Uses a simple `config.csv`  for credentials
+* ⚙️ Optional `MARK_AS_READ=true` toggle to control if emails should be marked as read
 
 ---
 
@@ -45,6 +43,7 @@ cd email_lead_reader
 ```bash
 python3 -m venv venv
 source venv/bin/activate
+# On Windows: venv\Scripts\activate
 ```
 
 ### 3. Install Dependencies
