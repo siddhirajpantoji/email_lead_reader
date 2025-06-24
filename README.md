@@ -26,8 +26,8 @@ This Python script connects to your Gmail inbox via IMAP, reads unread emails, f
 ## 🛠 Requirements
 
 * Python 3.7+
-* Gmail account (with IMAP access)
-* App Password (if 2FA is enabled)
+* Gmail account (IMAP access enabled) OR Outlook account with Azure App credentials
+* Internet access
 
 ---
 
@@ -61,26 +61,43 @@ pip install python-dotenv
 
 ---
 
-## 🔐 Setup: `.env` File
+## 🔐 Setup: Create a file `config.csv` in the root folder:
 
-Create a file named `.env` in the root of your project with:
-
-```env
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password
-IMAP_SERVER=imap.gmail.com
-IMAP_PORT=993
+```csv
+key,value
+EMAIL_PROVIDER,gmail                # or "outlook"
+EMAIL_USER,your_email@gmail.com
+EMAIL_PASS,your_gmail_app_password
+IMAP_SERVER,imap.gmail.com
+IMAP_PORT,993
+CLIENT_ID,xxxxxx-your-outlook-id
+TENANT_ID,xxxxxx-your-tenant-id
+MARK_AS_READ,true                  # or false
 ```
 
-> 🔒 If you're using Gmail with 2-Step Verification, [create an App Password here](https://myaccount.google.com/apppasswords).
+🔒 If using Gmail with 2-Step Verification:
+→ [Create an App Password](https://myaccount.google.com/apppasswords)
+
+🔑 If using Outlook:
+→ Register an app at [Azure Portal](https://portal.azure.com/) and get `CLIENT_ID` & `TENANT_ID`.
 
 ---
 
 ## 🚀 How to Run
 
+From the root folder:
+
 ```bash
-python email_lead_reader/main.py
+python -m email_lead_reader.main
 ```
+
+This will:
+
+* Connect to Gmail or Outlook (based on config)
+* Read up to 20 unread emails
+* Filter for leads
+* Save them to: `output/leads_YYYY-MM-DD_HH-MM.csv`
+* Mark emails as read (optional via config)
 
 ---
 
@@ -125,18 +142,14 @@ email_lead_reader/
 You can easily extend this script to:
 
 
-
-* **Microsoft Outlook** mailbox support using IMAP or Microsoft Graph API
-* **LinkedIn API** integration to fetch company/individual profiles associated with emails
-* **AI tools** for analyzing and scoring leads based on their context, sentiment, or frequency
+* **LinkedIn API** integration to fetch company/individual profiles associated with emails and enrich the data 
+* **AI tools** for analyzing and scoring leads based on their context, sentiment, or frequency 
 * Filter by **date range** (e.g. only this week)
-* Process **specific Gmail labels**
-* **Mark emails as read** after processing
+* Process **specific Gmail labels** or **specific Gmail labels**
 * Push leads to **Google Sheets** or a CRM
 * Add a **dashboard** to visualize leads
 * Use **AI** to suggest lead scores or categorize leads
 * Integrate with **Slack or CRM**
-* Send **auto-replies**
 
 Let me know and I’ll help you build these too!
 
