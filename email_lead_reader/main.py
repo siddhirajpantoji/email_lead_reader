@@ -23,10 +23,29 @@ def save_leads_csv(leads):
     ts = datetime.now().strftime("%Y-%m-%d_%H-%M")
     filename = f"output/leads_{ts}.csv"
 
-    # Write header and lead data to the CSV file
+    header = [
+    "Date",
+    "From",
+    "Subject",
+    "First Name",
+    "Last Name",
+    "Email",
+    "Company",
+    "Country",
+    "Services",
+    "Industry",
+    "Phone",
+    "Referred By",
+    "Referred Description",
+    "Message",
+    "Marketing Consent",
+    "Web URL"
+    ]
+
+
     with open(filename, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(["Date", "From", "Subject", "Body", "Emails", "Phones"])
+        writer = csv.writer(f, delimiter=",", quotechar='"', quoting=csv.QUOTE_ALL)
+        writer.writerow(header)  # header must be defined above
         writer.writerows(leads)
 
     print(f"✅ Saved {len(leads)} leads to {filename}")
@@ -45,4 +64,9 @@ if __name__ == "__main__":
         raise Exception("Unsupported EMAIL_PROVIDER. Use 'gmail' or 'outlook'.")
 
     # Write the collected leads to a CSV file
-    save_leads_csv(leads)
+    if not leads:
+        print("📭 No leads found based on the search criteria.")
+    else:
+        print(f"📥 Found {len(leads)} leads.")
+        print(leads)
+        save_leads_csv(leads)

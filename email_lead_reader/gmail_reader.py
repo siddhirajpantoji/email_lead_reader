@@ -1,37 +1,50 @@
-import imaplib, email
-from email_lead_reader.utils import is_lead_email, extract_contacts
+import imaplib
+import email
+from email_lead_reader.parser_utils import extract_fields_from_email 
 
-# 📩 Fetches unread Gmail emails and returns extracted leads
 def fetch_gmail_leads(config):
-    # Connect securely to Gmail's IMAP server using credentials from config
+    # Establish secure IMAP connection
     mail = imaplib.IMAP4_SSL(config['IMAP_SERVER'], int(config['IMAP_PORT']))
     mail.login(config['EMAIL_USER'], config['EMAIL_PASS'])
-
-    # Select the inbox
     mail.select("inbox")
 
-    # Search for unread (UNSEEN) emails
-    result, data = mail.search(None, 'UNSEEN')
-    print(f"🔍 Found {len(data[0].split())} unread emails")
-    # Get the first 20 email IDs
-    email_ids = data[0].split()[:20]
+    # Build IMAP search query
+    from_filter = config.get("FILTER_FROM_ADDRESS", "").strip()
+    subject_keyword = config.get("FILTER_SUBJECT_CONTAINS", "").strip()
+
+    search_parts = ['UNSEEN']
+    if from_filter:
+        search_parts.append(f'FROM "{from_filter}"')
+    if subject_keyword:
+        search_parts.append(f'SUBJECT "{subject_keyword}"')
+
+    search_criteria = f'({" ".join(search_parts)})'
+
+    result, data = mail.search(None, search_criteria)
+    email_ids = data[0].split()
+    print(f"📥 Found {len(email_ids)} unread emails based on the search criteria.")
+    max_emails = int(config.get("MAX_EMAILS", 20))
+
+    if not email_ids:
+        print("📭 No unread emails found based on the search criteria.")
+        return []
+
     leads = []
 
-    # Get whether emails should be marked as read
-    mark_as_read = config.get("MARK_AS_READ", "false").lower() == "true"
-
-    # Loop through each unread email
-    for eid in email_ids:
-        # Fetch full email by ID
-        res, msg_data = mail.fetch(eid, "(RFC822)")
+    for eid in email_ids[:max_emails]:
+        # Fetch full email data
+        res, msg_data = mail.fetch(eid, "(BODY.PEEK[])")
+        if res != 'OK':
+            print(f"❌ Failed to fetch email {eid.decode()}")
+            continue
         msg = email.message_from_bytes(msg_data[0][1])
 
-        # Extract basic details
+        # Extract metadata
         subject = msg["Subject"]
         sender = msg["From"]
         date = msg["Date"]
 
-        # Extract plain text body from multipart or plain emails
+        # Decode message body
         body = ""
         if msg.is_multipart():
             for part in msg.walk():
@@ -46,23 +59,30 @@ def fetch_gmail_leads(config):
             except:
                 continue
 
-        # Check if subject or body contains lead-related keywords
-        if is_lead_email(subject or "") or is_lead_email(body):
-            # Extract contacts from body text
-            emails, phones = extract_contacts(body)
+        fields = extract_fields_from_email(body)
+        leads.append([
+            date, sender, subject,
+            fields["first_name"],
+            fields["last_name"],
+            fields["email"],
+            fields["company"],
+            fields["country"],
+            fields["services"],
+            fields["industry"],
+            fields["phone"],
+            fields["referred_by"],
+            fields["referred_description"],
+            fields["message"],
+            fields["marketing_consent"],
+            fields["web_url"]
+        ])
 
-            # Store in structured format
-            leads.append([
-                date,
-                sender,
-                subject,
-                body[:100],
-                ", ".join(emails),
-                ", ".join(phones)
-            ])
-
-            # ✅ Mark as read if enabled in config
-            if mark_as_read:
-                mail.store(eid, '+FLAGS', '\\Seen')
+        # Optional: Mark as read based on config
+        print(config.get("MARK_AS_READ", "").lower())
+        if config.get("MARK_AS_READ", "").lower() == "true":
+            print(f"✅ Marking email {eid.decode()} as read")
+            mail.store(eid, '+FLAGS', '\\Seen')
+        else:
+            print(f"❌ Not marking email {eid.decode()} as read")
 
     return leads
