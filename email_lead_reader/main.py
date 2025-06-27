@@ -39,7 +39,8 @@ def save_leads_csv(leads):
     "Referred Description",
     "Message",
     "Marketing Consent",
-    "Web URL"
+    "Web URL",
+    "Email Validation"
     ]
 
 

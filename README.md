@@ -1,6 +1,6 @@
 # 📧 Lead Extraction from Gmail Inbox using IMAP
 
-This Python script connects to your Gmail inbox via IMAP, reads unread emails, filters **lead-related emails**, extracts **contact information (emails, phone numbers)** from the body, and stores the results into a local CSV file (`leads.csv`).
+This Python tool connects to your **Gmail** or **Outlook** inbox, reads unread emails, filters **lead-related messages**, extracts structured contact information, and saves it into a timestamped CSV file inside the `output/` folder.
 
 ---
 
@@ -12,10 +12,12 @@ This Python script connects to your Gmail inbox via IMAP, reads unread emails, f
 ## ✅ Features
 
 * 🔐 Reads **Gmail (via IMAP)** or **Outlook (via Microsoft Graph API)**
-* 🔍 Filters for **lead-related emails** using keyword matching
-* 📤 Extracts contact details: **email addresses** and **phone numbers**
+* 🔍 Filters based on sender & subject keywords (from `config.csv`)
+* 📋 Extracts structured fields: name, email, phone, company, message, etc.
+* 📁 Saves results in: `output/leads_YYYY-MM-DD_HH-MM.csv`
+* ⚙️ Configurable max email count (`MAX_EMAILS`) & read status (`MARK_AS_READ`)
+* 🧪 Lightweight, CLI-based and easy to extend
 * 🧠 Intelligent parsing using regex
-* 📁 Saves results in `output/leads_YYYY-MM-DD_HH-MM.csv`
 * 📝 Uses a simple `config.csv`  for credentials
 * ⚙️ Optional `MARK_AS_READ=true` toggle to control if emails should be marked as read
 
@@ -64,14 +66,17 @@ pip install python-dotenv
 
 ```csv
 key,value
-EMAIL_PROVIDER,gmail                # or "outlook"
+EMAIL_PROVIDER,gmail
 EMAIL_USER,your_email@gmail.com
 EMAIL_PASS,your_gmail_app_password
 IMAP_SERVER,imap.gmail.com
 IMAP_PORT,993
-CLIENT_ID,xxxxxx-your-outlook-id
-TENANT_ID,xxxxxx-your-tenant-id
-MARK_AS_READ,true                  # or false
+CLIENT_ID,your_outlook_client_id
+TENANT_ID,your_outlook_tenant_id
+FILTER_FROM_ADDRESS,noreply@form.com
+FILTER_SUBJECT_CONTAINS,Notification
+MAX_EMAILS,25
+MARK_AS_READ,true
 ```
 
 🔒 If using Gmail with 2-Step Verification:
@@ -93,28 +98,22 @@ python -m email_lead_reader.main
 This will:
 
 * Connect to Gmail or Outlook (based on config)
-* Read up to 20 unread emails
-* Filter for leads
-* Save them to: `output/leads_YYYY-MM-DD_HH-MM.csv`
 * Mark emails as read (optional via config)
+* Read up to `MAX_EMAILS` unread messages
+* Filter by `FROM` and/or subject keyword
+* Extract form submission fields
+* Save results to `output/leads_YYYY-MM-DD_HH-MM.csv`
+* Optionally mark emails as read based on config
 
 ---
 
-## 🧐 Lead Detection Logic
 
-The script detects lead emails if:
+## 📄 Extracted Fields (CSV)
 
-* The **subject** or **body** contains keywords like:
-
-  * `"lead"`, `"inquiry"`, `"interested"`, `"contact"`, `"requirement"`, `"demo"`, `"project"`, `"need"`, `"proposal"`, `"quote"`, etc.
-
----
-
-## 📄 Output Format: `leads.csv`
-
-| Date                            | From                                                 | Subject               | Body                             | Emails                                      | Phones         |
-| ------------------------------- | ---------------------------------------------------- | --------------------- | -------------------------------- | ------------------------------------------- | -------------- |
-| Mon, 17 Jun 2024 11:00:00 +0000 | John Doe [john@example.com](mailto:john@example.com) | Inquiry about website | Hi, I'm looking for a website... | [john@example.com](mailto:john@example.com) | +91 9876543210 |
+| Date                            | From                                                           | Subject                     | First Name | Last Name | Email                                                         | Company        | Country       | Services         | Industry                     | Phone           | Referred By | Referred Description    | Message                                                                                                                                      | Marketing Consent | Web URL          |
+| ------------------------------- | -------------------------------------------------------------- | --------------------------- | ---------- | --------- | ------------------------------------------------------------- | -------------- | ------------- | ---------------- | ---------------------------- | --------------- | ----------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ---------------- |
+| Wed, 25 Jun 2025 00:43:32 +0530 | John Smith [jsmith@formsubmit.io](mailto:jsmith@formsubmit.io) | Form Submittal Notification | Chad       | Hudgins   | [chudgins@advanceddata.com](mailto:chudgins@advanceddata.com) | Advanced Data  | United States | Customer Success | Banking & Financial Services | 8005370458      | Others      |                         | We are trying to do an urgent employment verification for one of your employees on behalf of Provident Bank. Please respond with HR contact. | 1                 | advanceddata.com |
+| Tue, 24 Jun 2025 13:15:00 +0530 | Jane Doe [jane@solutions.com](mailto:jane@solutions.com)       | Inquiry - Software Support  | Jane       | Doe       | [jane@solutions.com](mailto:jane@solutions.com)               | Tech Solutions | Canada        | Software Support | IT Services                  | +1-416-555-1234 | Google      | Referred by SEO search. | I need information on your software products and pricing.                                                                                    | Yes               | solutions.com    |
 
 ---
 
@@ -122,16 +121,16 @@ The script detects lead emails if:
 
 ```
 email_lead_reader/
-├── email_lead_reader/         # Source code package
-│   ├── __init__.py
-│   └── main.py                # Your main script
-├── tests/                     # Unit tests
-│   └── test_main.py
-├── .gitignore
-├── requirements.txt
-├── README.md
-├── setup.py                   # For packaging
-└── venv/                      # Virtual environment (optional, local only)
+├── email_lead_reader/
+│   ├── gmail_reader.py         # Gmail IMAP logic
+│   ├── outlook_reader.py       # Microsoft Graph logic
+│   ├── parser_utils.py         # Email field extraction logic
+│   └── main.py                 # Main launcher
+├── config.csv                  # Email credentials & filters
+├── output/                     # All output CSV files
+├── requirements.txt            # Required libraries
+├── README.md                   # You're here
+└── venv/                       # Virtual environment (optional, local only)
 ```
 
 ---
@@ -144,7 +143,7 @@ You can easily extend this script to:
 * **LinkedIn API** integration to fetch company/individual profiles associated with emails and enrich the data 
 * **AI tools** for analyzing and scoring leads based on their context, sentiment, or frequency 
 * Filter by **date range** (e.g. only this week)
-* Process **specific Gmail labels** or **specific Gmail labels**
+* Process **specific Gmail labels** or **specific Outlook labels**
 * Push leads to **Google Sheets** or a CRM
 * Add a **dashboard** to visualize leads
 * Use **AI** to suggest lead scores or categorize leads

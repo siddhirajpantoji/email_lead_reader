@@ -60,6 +60,7 @@ def fetch_gmail_leads(config):
                 continue
 
         fields = extract_fields_from_email(body)
+        print(fields)
         leads.append([
             date, sender, subject,
             fields["first_name"],
@@ -74,7 +75,8 @@ def fetch_gmail_leads(config):
             fields["referred_description"],
             fields["message"],
             fields["marketing_consent"],
-            fields["web_url"]
+            fields["web_url"],
+            fields["validation_result"]  # Validation result of the email
         ])
 
         # Optional: Mark as read based on config
